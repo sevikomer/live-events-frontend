@@ -1,4 +1,6 @@
 import React from 'react';
+import Header from './Header';
+
 // import axios from "axios";
 
 const Lieux = () => {
@@ -16,6 +18,7 @@ const Lieux = () => {
 
   return (
     <>
+      <Header />
       <div className='text-orange p-8'>
         <h1 className='lg:text-6xl text-4xl font-extrabold text-center pt-2 uppercase '>lieux</h1>
       </div>
@@ -25,15 +28,15 @@ const Lieux = () => {
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="space-y-6" action="#" method="POST">
               <div>
-                <label htmlFor="title" className="block text-sm font-medium leading-6 text-black">
-                  Titre
+                <label htmlFor="name" className="block text-sm font-medium leading-6 text-black">
+                  Nom
                 </label>
                 <div className="mt-2">
                   <input
-                    id="title"
-                    name="title"
-                    type="title"
-                    autoComplete="title"
+                    id="name"
+                    name="name"
+                    type="name"
+                    autoComplete="name"
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange sm:text-sm sm:leading-6"
                   />
@@ -42,26 +45,55 @@ const Lieux = () => {
 
               <div>
                 <div className="flex items-center justify-between">
-                  <label htmlFor="start_date" className="block text-sm font-medium leading-6 text-gray-900">
-                    Date de début
+                  <label htmlFor="category" className="block text-sm font-medium leading-6 text-gray-900">
+                    Catégorie
                   </label>
-                  <div className="text-sm">
-                    {/* <a href="#" className="font-semibold text-orange hover:text-orange">
-                                        Forgot password?
-                                    </a> */}
-                  </div>
                 </div>
                 <div className="mt-2">
                   <input
-                    id="start_date"
-                    name="start_date"
-                    type="start_date"
-                    autoComplete="start_date"
+                    id="category"
+                    name="category"
+                    type="category"
+                    autoComplete="category"
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
+
+              <div>
+                <label htmlFor="lat" className="block text-sm font-medium leading-6 text-black">
+                  Latitude
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="lat"
+                    name="lat"
+                    type="lat"
+                    autoComplete="lat"
+                    required
+                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="lng" className="block text-sm font-medium leading-6 text-black">
+                  Longitude
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="lng"
+                    name="lng"
+                    type="lng"
+                    autoComplete="lng"
+                    required
+                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
+
 
               <div>
                 <button

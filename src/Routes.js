@@ -13,8 +13,8 @@ function AppRoutes() {
   return (
     <div>
       <Routes>
-        <Route path="/" Component={Home} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" Component={Login} />
+        <Route path="/home" element={<Home />} />
         <Route path="/informations" element={<Informations />} />
         <Route path="/programmation" element={<Programmation />} />
         <Route path="/lieux" element={<Lieux />} />

@@ -1,4 +1,6 @@
 import React from 'react';
+import Header from './Header';
+
 // import axios from "axios";
 
 const Programmation = () => {
@@ -16,6 +18,7 @@ const Programmation = () => {
 
   return (
     <>
+      <Header />
       <div className='text-orange p-8'>
         <h1 className='lg:text-6xl text-4xl font-extrabold text-center pt-2 uppercase '>programmation</h1>
       </div>
@@ -24,6 +27,24 @@ const Programmation = () => {
           <h2 className='text-center text-xl font-bold leading-9 tracking-tight text-black'>Ajouter une programmation</h2>
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="space-y-6" action="#" method="POST">
+
+              <div>
+                <label htmlFor="image" className="block text-sm font-medium leading-6 text-black">
+                  Image
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="image"
+                    name="image"
+                    type="file"
+                    autoComplete="image"
+                    required
+                    accept='image/png, image/jpg'
+                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
               <div>
                 <label htmlFor="title" className="block text-sm font-medium leading-6 text-black">
                   Titre
@@ -34,6 +55,22 @@ const Programmation = () => {
                     name="title"
                     type="title"
                     autoComplete="title"
+                    required
+                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="location" className="block text-sm font-medium leading-6 text-black">
+                  Lieu
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="location"
+                    name="location"
+                    type="location"
+                    autoComplete="location"
                     required
                     className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange sm:text-sm sm:leading-6"
                   />
