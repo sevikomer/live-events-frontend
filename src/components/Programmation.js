@@ -1,134 +1,140 @@
-import React from 'react';
-import Header from './Header';
-
-// import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from "axios";
+import qs from "qs";
 
 const Programmation = () => {
 
-  // const [events, setEvents] = useState([])
+  const [events, setEvents] = useState([])
 
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost/live-events/wp-json/tribe/events/v1/events")
-  //     .then((res) => {
-  //       const data = res.data
-  //       setEvents(data.events);
-  //     });
-  // }, [])
+  const [queryParams, setQueryParams] = useState({
+    start_date: "2024-05-25",
+    venue: null,
+  })
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  useEffect(() => {
+    const queryParamsPart = qs.stringify(queryParams, { skipNulls: true });
+
+    setIsLoading(true);
+
+    axios
+      .get(`http://localhost:4200/api/event?${queryParamsPart}`)
+      // .get(`http://localhost/live-events/wp-json/tribe/events/v1/events?${queryParamsPart}`)
+      .then((res) => {
+        const data = res.data
+        setEvents(data);
+        setIsLoading(false);
+      });
+  }, [queryParams])
+
+  console.log("events : ", events);
+
+
+  const [isFilterOpen, setIsFilterOpen] = useState(true)
+
+  function FilterSelect({ label, id, divClassName, onChange, options, value }) {
+    return (
+      <div className={divClassName}>
+        <label htmlFor={id} className='lg:text-white md:text-brown'>{label} </label>
+        <select name={id} id={id} value={value} onChange={onChange}>
+          {options.map((option) => (
+            <option key={option.label} value={option.value}>{option.label}</option>
+          ))}
+        </select>
+      </div>
+    )
+  }
 
   return (
     <>
-      <Header />
-      <div className='text-orange p-8'>
+      <div className='text-orange p-8 bg-black'>
         <h1 className='lg:text-6xl text-4xl font-extrabold text-center pt-2 uppercase '>programmation</h1>
       </div>
-      <div className='grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1'>
-        <div className='m-10 p-5 flex flex-col border border-solid border-black rounded-md'>
-          <h2 className='text-center text-xl font-bold leading-9 tracking-tight text-black'>Ajouter une programmation</h2>
-          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" action="#" method="POST">
 
-              <div>
-                <label htmlFor="image" className="block text-sm font-medium leading-6 text-black">
-                  Image
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="image"
-                    name="image"
-                    type="file"
-                    autoComplete="image"
-                    required
-                    accept='image/png, image/jpg'
-                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange sm:text-sm sm:leading-6"
+      {
+        isLoading ? <div className="bg-black text-white text-xl font-bold text-center">CHARGEMENT EN COURS</div>
+          :
+          <>
+            <div className='pt-4 bg-black'>
+              <h2 className='text-orange underline text-2xl text-center font-extrabold uppercase'>
+                filtres
+                <button onClick={() => setIsFilterOpen((prev) => !prev)}>+</button>
+              </h2>
+              <div className='pt-2 md:text-xl flex justify-around'>
+                <div className='block'>
+                  <FilterSelect
+                    divClassName={isFilterOpen ? "showFilter" : "hideFilter"}
+                    label="Scènes"
+                    id="venue"
+                    value={queryParams.venue}
+                    options={[
+                      { label: "Toutes", value: "" },
+                      { label: "Scène 1", value: 195 },
+                      { label: "Scène 2", value: 209 },
+                      { label: "Scène 3", value: 211 },
+                      { label: "Scène 4", value: 213 },
+                      { label: "Scène 5", value: 215 },
+                    ]}
+                    onChange={e => setQueryParams({
+                      ...queryParams,
+                      venue: e.target.value?.length > 0 ? e.target.value : undefined
+                    })}
                   />
                 </div>
-              </div>
-
-              <div>
-                <label htmlFor="title" className="block text-sm font-medium leading-6 text-black">
-                  Titre
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="title"
-                    name="title"
-                    type="title"
-                    autoComplete="title"
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange sm:text-sm sm:leading-6"
+                <div className='block'>
+                  <FilterSelect
+                    divClassName={isFilterOpen ? "showFilter" : "hideFilter"}
+                    label="Dates"
+                    id="date"
+                    value={queryParams.start_date}
+                    options={[
+                      { label: "Toutes", value: "" },
+                      { label: "2024-06-07", value: "2024-06-07" },
+                      { label: "2024-06-08", value: "2024-06-08" },
+                      { label: "2024-06-09", value: "2024-06-09" },
+                    ]}
+                    onChange={e => setQueryParams({
+                      ...queryParams,
+                      start_date: e.target.value?.length > 0 ? e.target.value : undefined
+                    })}
                   />
                 </div>
-              </div>
 
-              <div>
-                <label htmlFor="location" className="block text-sm font-medium leading-6 text-black">
-                  Lieu
-                </label>
-                <div className="mt-2">
-                  <input
-                    id="location"
-                    name="location"
-                    type="location"
-                    autoComplete="location"
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-black shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange sm:text-sm sm:leading-6"
-                  />
-                </div>
               </div>
-
-              <div>
-                <div className="flex items-center justify-between">
-                  <label htmlFor="start_date" className="block text-sm font-medium leading-6 text-gray-900">
-                    Date de début
-                  </label>
-                  <div className="text-sm">
-                    {/* <a href="#" className="font-semibold text-orange hover:text-orange">
-                                        Forgot password?
-                                    </a> */}
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <input
-                    id="start_date"
-                    name="start_date"
-                    type="start_date"
-                    autoComplete="start_date"
-                    required
-                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange sm:text-sm sm:leading-6"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <button
-                  type="submit"
-                  className="flex w-full justify-center rounded-md bg-orange px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-yellow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange"
-                >
-                  Ajouter
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div className='col-span-2 m-10 p-5 border border-solid border-black rounded-md'>
-          <h2 className='text-center text-xl font-bold leading-9 tracking-tight text-black'>Liste des programmations</h2>
-          <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2'>
-            {/* {events?.map(event => (
-          <div key={event.id} className='bg-black text-white  p-20 text-center'>
-            <div className='flex justify-center '>
-              <img src={event.image?.url} alt='' className='w-60 h-40' />
+              <style>{`
+        .hideFilter {
+          display: none;
+        }
+        .showFilter {
+          display: block;
+          width: 100%;
+        }
+      `}</style>
             </div>
-            <div>
-              <h3 className='font-bold text-xl'>{event.title}</h3>
+
+            <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 bg-black'>
+              {events?.map(event => (
+                <div key={event._id} className='bg-black text-white  p-20 text-center'>
+                  <Link to={`/programmation/${event._id}`}>
+                    <div className='flex justify-center '>
+                      <img src={`/images/${event.image}`} alt='' className='w-60 h-40' />
+                    </div>
+                    <div>
+                      <h3 className='font-bold text-xl'>{event.title}</h3>
+                    </div>
+                    <div className='font-bold'>{event.start_date}</div>
+                    <div className='font-bold'>{event.venue?.name}</div>
+                  </Link>
+                </div>
+              ))}
             </div>
-            <div className='font-bold'>{event.start_date}</div>
-          </div>
-        ))} */}
-          </div>
-        </div>
-      </div>
+          </>
+      }
+
     </>
+
   )
 }
 
