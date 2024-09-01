@@ -51,10 +51,9 @@ function ProgrammationSheet() {
                                         <h3 className='font-bold text-4xl pb-4 text-orange'>{event.title}</h3>
                                     </div>
                                     <div className='text-white font-semibold text-xl pb-4'>{event.start_date}</div>
-                                    <div className='text-white font-semibold text-xl pb-4'>{event.venue?.venue}</div>
+                                    <div className='text-white font-semibold text-xl pb-4'>{event.venue}</div>
                                 </div>
                             </div>
-                            <div className='text-white pb-4' dangerouslySetInnerHTML={{ __html: event.description }}></div>
                         </div>
                     </div>
             }
