@@ -125,7 +125,7 @@ const Programmation = () => {
                       <h3 className='font-bold text-xl'>{event.title}</h3>
                     </div>
                     <div className='font-bold'>{event.start_date}</div>
-                    <div className='font-bold'>{event.venue}</div>
+                    <div className='font-bold'>{event.venue.name}</div>
                   </Link>
                 </div>
               ))}
