@@ -1,43 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import axios from "axios";
-import qs from "qs";
 
 const Programmation = () => {
 
   const [events, setEvents] = useState([])
 
-  const [queryParams, setQueryParams] = useState({
-    start_date: "2024-05-25",
-    venue: null,
-  })
+  const [selectedDate, setSelectedDate] = useState([])
+  const [selectedVenue, setSelectedVenue] = useState([])
+
+  const filteredList = useMemo(getFilteredList, [selectedDate, selectedVenue, events]);
+
+  function getFilteredList() {
+    if (selectedDate?.length > 0 && selectedVenue?.length === 0) {
+      return events?.filter((event) => selectedDate?.includes(event.start_date))
+    } else if (selectedVenue?.length > 0 && selectedDate?.length === 0) {
+      return events?.filter((event) => selectedVenue?.includes(event.venue.name))
+    } else if (selectedVenue?.length > 0 && selectedDate?.length > 0) {
+      return events?.filter((event) => selectedVenue?.includes(event.venue.name) && selectedDate?.includes(event.start_date))
+    }
+    else return events;
+  };
 
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    const queryParamsPart = qs.stringify(queryParams, { skipNulls: true });
 
     setIsLoading(true);
 
     axios
-      .get(`http://localhost:4200/api/event?${queryParamsPart}`)
-      // .get(`http://localhost/live-events/wp-json/tribe/events/v1/events?${queryParamsPart}`)
+      .get(`http://localhost:4200/api/event`)
       .then((res) => {
         const data = res.data
         setEvents(data);
         setIsLoading(false);
       });
-  }, [queryParams])
-
-  console.log("events : ", events);
-
+  }, [])
 
   const [isFilterOpen, setIsFilterOpen] = useState(true)
 
   function FilterSelect({ label, id, divClassName, onChange, options, value }) {
     return (
       <div className={divClassName}>
-        <label htmlFor={id} className='lg:text-white md:text-brown'>{label} </label>
+        <label htmlFor={id} className='text-white'>{label} </label>
         <select name={id} id={id} value={value} onChange={onChange}>
           {options.map((option) => (
             <option key={option.label} value={option.value}>{option.label}</option>
@@ -68,37 +73,30 @@ const Programmation = () => {
                     divClassName={isFilterOpen ? "showFilter" : "hideFilter"}
                     label="Scènes"
                     id="venue"
-                    value={queryParams.venue}
+                    value={selectedVenue}
                     options={[
                       { label: "Toutes", value: "" },
-                      { label: "Scène 1", value: 195 },
-                      { label: "Scène 2", value: 209 },
-                      { label: "Scène 3", value: 211 },
-                      { label: "Scène 4", value: 213 },
-                      { label: "Scène 5", value: 215 },
+                      { label: "Scène 1", value: "Scène 1" },
+                      { label: "Scène 2", value: "Scène 2" },
+                      { label: "Scène 3", value: "Scène 3" },
+                      { label: "Scène 4", value: "Scène 4" },
                     ]}
-                    onChange={e => setQueryParams({
-                      ...queryParams,
-                      venue: e.target.value?.length > 0 ? e.target.value : undefined
-                    })}
+                    onChange={e => setSelectedVenue(e.target.value)}
                   />
                 </div>
                 <div className='block'>
                   <FilterSelect
                     divClassName={isFilterOpen ? "showFilter" : "hideFilter"}
                     label="Dates"
-                    id="date"
-                    value={queryParams.start_date}
+                    id="start_date"
+                    value={selectedDate}
                     options={[
                       { label: "Toutes", value: "" },
-                      { label: "2024-06-07", value: "2024-06-07" },
-                      { label: "2024-06-08", value: "2024-06-08" },
-                      { label: "2024-06-09", value: "2024-06-09" },
+                      { label: "2024-10-05", value: "2024-10-05T22:00:00.000Z" },
+                      { label: "2024-01-05", value: "2024-01-05T23:00:00.000Z" },
+                      { label: "2024-06-06", value: "2024-06-06T00:00:00.000Z" },
                     ]}
-                    onChange={e => setQueryParams({
-                      ...queryParams,
-                      start_date: e.target.value?.length > 0 ? e.target.value : undefined
-                    })}
+                    onChange={e => setSelectedDate(e.target.value)}
                   />
                 </div>
 
@@ -115,7 +113,7 @@ const Programmation = () => {
             </div>
 
             <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 bg-black'>
-              {events?.map(event => (
+              {filteredList?.map(event => (
                 <div key={event._id} className='bg-black text-white  p-20 text-center'>
                   <Link to={`/programmation/${event._id}`}>
                     <div className='flex justify-center '>
