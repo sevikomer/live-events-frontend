@@ -30,7 +30,7 @@ const Carte = ({ points }: Props) => {
   useEffect(() => {
     const initMap = async () => {
       const resVenues = await axios.get(
-        `http://${process.env.REACT_APP_API_URL}/api/venue`
+        `https://${process.env.REACT_APP_API_URL}/api/venue`
       );
 
       const data = resVenues?.data;
