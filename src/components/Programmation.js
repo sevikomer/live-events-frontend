@@ -29,7 +29,7 @@ const Programmation = () => {
     setIsLoading(true);
 
     axios
-      .get(`http://localhost:4200/api/event`)
+      .get(`http://${process.env.REACT_APP_API_URL}/api/event`)
       .then((res) => {
         const data = res.data
         setEvents(data);

@@ -20,7 +20,7 @@ function ProgrammationSheet() {
         const getEvent = async () => {
             setIsLoading(true);
             const res = await axios
-                .get(`http://localhost:4200/api/event/${eventId}`);
+                .get(`http://${process.env.REACT_APP_API_URL}/api/event/${eventId}`);
             setEvent(res?.data ?? {})
             setIsLoading(false);
         };
