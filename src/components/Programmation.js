@@ -29,7 +29,7 @@ const Programmation = () => {
     setIsLoading(true);
 
     axios
-      .get(`https://${process.env.REACT_APP_API_URL}/api/event`)
+      .get(`${process.env.REACT_APP_API_URL}/api/event`)
       .then((res) => {
         const data = res.data
         setEvents(data);
