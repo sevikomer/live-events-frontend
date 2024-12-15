@@ -7,8 +7,8 @@ import {
   InfoWindow,
 } from "@vis.gl/react-google-maps";
 import { useState } from "react";
-import Markers from "./Markers.tsx";
-import Filter from "./Filter.js";
+import Markers from "../components/Markers.tsx";
+import Filter from "../components/Filter.jsx";
 import axios from "axios";
 
 type Point = google.maps.LatLngLiteral & { key: string } & { name: string } & {

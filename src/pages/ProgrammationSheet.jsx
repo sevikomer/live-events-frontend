@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import axios from "axios";
 
 
@@ -11,6 +11,19 @@ function ProgrammationSheet() {
 
 
     const { eventId } = useParams()
+    const id = eventId.split("-")[0]; 
+    const navigate = useNavigate()
+
+      function convertToSlug(title) {
+        return title
+            .toLowerCase() // 1. Mettre en minuscule
+            .normalize("NFD") // 2. Supprimer les accents
+            .replace(/[\u0300-\u036f]/g, "") // Supprime les caractères diacritiques
+            .replace(/[^a-z0-9\s-]/g, "") // 3. Garder uniquement lettres, chiffres, espaces et tirets
+            .replace(/\s+/g, "-") // 4. Remplacer les espaces par des tirets
+            .replace(/-+/g, "-") // 5. Retirer les tirets multiples
+            .replace(/^-+|-+$/g, ""); // 6. Supprimer les tirets au début et à la fin
+    }
 
     const [event, setEvent] = useState({})
 
@@ -20,12 +33,13 @@ function ProgrammationSheet() {
         const getEvent = async () => {
             setIsLoading(true);
             const res = await axios
-                .get(`https://${process.env.REACT_APP_API_URL}/api/event/${eventId}`);
+                .get(`https://${process.env.REACT_APP_API_URL}/api/event/${id}`);
             setEvent(res?.data ?? {})
             setIsLoading(false);
+            navigate(`/programmation/${id}-${convertToSlug(res?.data.title)}`, { replace: true });
         };
         getEvent().then(() => { }).catch(() => { })
-    }, [eventId])
+    }, [id, navigate])
 
 
     return (
